@@ -3,7 +3,7 @@ name: "OpenID Connect Conformity Tests on Master Branch)"
 on:
   push:
     branches:
-      - master
+      - canonical
 
 jobs:
   oidc-conformity:
