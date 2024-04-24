@@ -20,7 +20,7 @@ jobs:
           go-version: "1.21"
       - name: Update fosite
         run: |
-          go mod edit -replace github.com/ory/fosite=github.com/ory/fosite@${{ github.sha }}
+          go mod edit -replace github.com/ory/fosite=github.com/canonical/fosite@${{ github.sha }}
           go mod tidy
       - name: Start service
         run: ./test/conformance/start.sh
