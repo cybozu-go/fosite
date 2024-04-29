@@ -109,6 +109,10 @@ func (v DeviceAccessRequestValidator) ValidateRedirectURI(accessRequester fosite
 	return nil
 }
 
+func (v DeviceAccessRequestValidator) GetGrantType(requester fosite.AccessRequester) fosite.GrantType {
+	return fosite.GrantTypeDeviceCode
+}
+
 type DeviceCodeTokenEndpointHandler struct {
 	oauth2.GenericCodeTokenEndpointHandler
 }
