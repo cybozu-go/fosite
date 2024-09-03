@@ -23,7 +23,7 @@ import (
 
 func TestAuthorizeCode_PopulateTokenEndpointResponse(t *testing.T) {
 	for k, strategy := range map[string]CoreStrategy{
-		"hmac": &hmacshaStrategy,
+		"hmac": hmacshaStrategy,
 	} {
 		t.Run("strategy="+k, func(t *testing.T) {
 			store := storage.NewMemoryStore()
@@ -242,7 +242,7 @@ func TestAuthorizeCode_PopulateTokenEndpointResponse(t *testing.T) {
 
 func TestAuthorizeCode_HandleTokenEndpointRequest(t *testing.T) {
 	for k, strategy := range map[string]CoreStrategy{
-		"hmac": &hmacshaStrategy,
+		"hmac": hmacshaStrategy,
 	} {
 		t.Run("strategy="+k, func(t *testing.T) {
 			store := storage.NewMemoryStore()
@@ -250,7 +250,7 @@ func TestAuthorizeCode_HandleTokenEndpointRequest(t *testing.T) {
 				ScopeStrategy:            fosite.HierarchicScopeStrategy,
 				AudienceMatchingStrategy: fosite.DefaultAudienceMatchingStrategy,
 				AuthorizeCodeLifespan:    time.Minute,
-			}
+      }
 			h := GenericCodeTokenEndpointHandler{
 				AccessRequestValidator: &AuthorizeExplicitGrantAccessRequestValidator{},
 				CodeHandler: &AuthorizeCodeHandler{
