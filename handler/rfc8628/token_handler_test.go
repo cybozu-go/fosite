@@ -25,6 +25,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/*
+In ory/fosite v0.47.0, they introduced a new function to create the HMACSHAStrategy
 var hmacshaStrategy = oauth2.HMACSHAStrategy{
 	Enigma: &hmac.HMACStrategy{Config: &fosite.Config{GlobalSecret: []byte("foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar")}},
 	Config: &fosite.Config{
@@ -32,6 +34,14 @@ var hmacshaStrategy = oauth2.HMACSHAStrategy{
 		AuthorizeCodeLifespan: time.Hour * 24,
 	},
 }
+*/
+var hmacshaStrategy = oauth2.NewHMACSHAStrategy(
+	&hmac.HMACStrategy{Config: &fosite.Config{GlobalSecret: []byte("foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar")}},
+	&fosite.Config{
+		AccessTokenLifespan:   time.Hour * 24,
+		AuthorizeCodeLifespan: time.Hour * 24,
+	},
+)
 
 var RFC8628HMACSHAStrategy = DefaultDeviceStrategy{
 	Enigma:           &hmac.HMACStrategy{Config: &fosite.Config{GlobalSecret: []byte("foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar")}},
@@ -46,7 +56,7 @@ func TestDeviceUserCode_HandleTokenEndpointRequest(t *testing.T) {
 		oauth2.CoreStrategy
 		RFC8628CodeStrategy
 	}{
-		"hmac": {&hmacshaStrategy, &RFC8628HMACSHAStrategy},
+		"hmac": {hmacshaStrategy, &RFC8628HMACSHAStrategy},
 	} {
 		t.Run("strategy="+k, func(t *testing.T) {
 			store := storage.NewMemoryStore()
@@ -305,7 +315,7 @@ func TestDeviceUserCode_HandleTokenEndpointRequest_RateLimiting(t *testing.T) {
 		oauth2.CoreStrategy
 		RFC8628CodeStrategy
 	}{
-		"hmac": {&hmacshaStrategy, &RFC8628HMACSHAStrategy},
+		"hmac": {hmacshaStrategy, &RFC8628HMACSHAStrategy},
 	} {
 		t.Run("strategy="+k, func(t *testing.T) {
 			store := storage.NewMemoryStore()
@@ -373,7 +383,7 @@ func TestDeviceUserCode_PopulateTokenEndpointResponse(t *testing.T) {
 		oauth2.CoreStrategy
 		RFC8628CodeStrategy
 	}{
-		"hmac": {&hmacshaStrategy, &RFC8628HMACSHAStrategy},
+		"hmac": {hmacshaStrategy, &RFC8628HMACSHAStrategy},
 	} {
 		t.Run("strategy="+k, func(t *testing.T) {
 			store := storage.NewMemoryStore()
@@ -849,8 +859,8 @@ func TestDeviceUserCodeTransactional_HandleTokenEndpointRequest(t *testing.T) {
 					mockTransactional,
 					mockCoreStore,
 				},
-				AccessTokenStrategy:  &strategy,
-				RefreshTokenStrategy: &strategy,
+				AccessTokenStrategy:  strategy,
+				RefreshTokenStrategy: strategy,
 				Config: &fosite.Config{
 					ScopeStrategy:             fosite.HierarchicScopeStrategy,
 					AudienceMatchingStrategy:  fosite.DefaultAudienceMatchingStrategy,
