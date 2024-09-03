@@ -783,7 +783,7 @@ func TestAuthorizeCodeTransactional_HandleTokenEndpointRequest(t *testing.T) {
 			h := GenericCodeTokenEndpointHandler{
 				AccessRequestValidator: &AuthorizeExplicitGrantAccessRequestValidator{},
 				CodeHandler: &AuthorizeCodeHandler{
-					AuthorizeCodeStrategy: &strategy,
+					AuthorizeCodeStrategy: strategy,
 				},
 				SessionHandler: &AuthorizeExplicitGrantSessionHandler{
 					AuthorizeCodeStorage: authorizeTransactionalStore{
@@ -795,8 +795,8 @@ func TestAuthorizeCodeTransactional_HandleTokenEndpointRequest(t *testing.T) {
 					mockTransactional,
 					mockCoreStore,
 				},
-				AccessTokenStrategy:  &strategy,
-				RefreshTokenStrategy: &strategy,
+				AccessTokenStrategy:  strategy,
+				RefreshTokenStrategy: strategy,
 				Config:               config,
 			}
 
