@@ -179,7 +179,7 @@ func (c *GenericCodeTokenEndpointHandler) HandleTokenEndpointRequest(ctx context
 	var ar fosite.Requester
 	if ar, err = c.Session(ctx, requester, signature); err != nil {
 		if ar != nil && (errors.Is(err, fosite.ErrInvalidatedAuthorizeCode) || errors.Is(err, fosite.ErrInvalidatedDeviceCode)) {
-			return c.revokeTokens(ctx, requester.GetID())
+			return c.revokeTokens(ctx, ar.GetID())
 		}
 
 		return err
