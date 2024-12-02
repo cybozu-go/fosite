@@ -5,7 +5,7 @@ on:
 
 jobs:
   create_pull_requests:
-    runs-on: ubuntu-latest-arm-2core
+    runs-on: ubuntu-latest
     name: Create Updates Pull Request
     permissions:
       pull-requests: write
