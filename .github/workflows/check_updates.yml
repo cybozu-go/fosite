@@ -1,0 +1,25 @@
+name: Check Upstream For Updates
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  create_pull_requests:
+    runs-on: ubuntu-latest-arm-2core
+    name: Create Updates Pull Request
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git fetch upstream
+          export CANONICAL_REF=$(git rev-parse --short upstream/canonical-master)
+
+          git checkout -b $CANONICAL_REF-canonical-updates upstream/canonical-master
+          git push origin $CANONICAL_REF-canonical-updates
+          gh pr create -B cybozu -H $CANONICAL_REF-canonical-updates --title "test" --body "contains these changes:"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
