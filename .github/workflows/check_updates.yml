@@ -9,12 +9,15 @@ jobs:
     name: Create Updates Pull Request
     permissions:
       pull-requests: write
+      contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
 
+          git remote add upstream https://github.com/canonical/fosite
           git fetch upstream
           export CANONICAL_REF=$(git rev-parse --short upstream/canonical-master)
 
