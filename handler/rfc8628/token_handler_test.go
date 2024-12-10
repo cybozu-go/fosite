@@ -27,13 +27,14 @@ import (
 
 /*
 In ory/fosite v0.47.0, they introduced a new function to create the HMACSHAStrategy
-var hmacshaStrategy = oauth2.HMACSHAStrategy{
-	Enigma: &hmac.HMACStrategy{Config: &fosite.Config{GlobalSecret: []byte("foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar")}},
-	Config: &fosite.Config{
-		AccessTokenLifespan:   time.Hour * 24,
-		AuthorizeCodeLifespan: time.Hour * 24,
-	},
-}
+
+	var hmacshaStrategy = oauth2.HMACSHAStrategy{
+		Enigma: &hmac.HMACStrategy{Config: &fosite.Config{GlobalSecret: []byte("foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar")}},
+		Config: &fosite.Config{
+			AccessTokenLifespan:   time.Hour * 24,
+			AuthorizeCodeLifespan: time.Hour * 24,
+		},
+	}
 */
 var hmacshaStrategy = oauth2.NewHMACSHAStrategy(
 	&hmac.HMACStrategy{Config: &fosite.Config{GlobalSecret: []byte("foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar")}},

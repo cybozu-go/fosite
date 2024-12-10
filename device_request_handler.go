@@ -51,7 +51,7 @@ func (f *Fosite) NewDeviceRequest(ctx context.Context, r *http.Request) (_ Devic
 		return nil, err
 	}
 
-	if err := f.validateAudience(ctx, r, request); err != nil {
+	if err := f.validateDeviceAudience(ctx, r, request); err != nil {
 		return request, err
 	}
 
@@ -66,5 +66,24 @@ func (f *Fosite) validateDeviceScope(ctx context.Context, r *http.Request, reque
 		}
 	}
 	request.SetRequestedScopes(scope)
+	return nil
+}
+
+func (f *Fosite) validateDeviceAudience(ctx context.Context, r *http.Request, request *DeviceRequest) error {
+	var audience []string
+	audiences := request.Form["audience"]
+	if len(audiences) > 1 {
+		audience = RemoveEmpty(audiences)
+	} else if len(audiences) == 1 {
+		audience = RemoveEmpty(strings.Split(audiences[0], " "))
+	} else {
+		audience = []string{}
+	}
+
+	if err := f.Config.GetAudienceStrategy(ctx)(request.Client.GetAudience(), audience); err != nil {
+		return err
+	}
+
+	request.SetRequestedAudience(audience)
 	return nil
 }
