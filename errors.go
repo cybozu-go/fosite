@@ -22,13 +22,17 @@ import (
 var (
 	// ErrInvalidatedAuthorizeCode is an error indicating that an authorization code has been
 	// used previously.
-	ErrInvalidatedAuthorizeCode = errors.New("Authorization code has ben invalidated")
+	ErrInvalidatedAuthorizeCode = stderr.New("Authorization code has ben invalidated")
 	// ErrInvalidatedDeviceCode is an error indicating that a device code has benn used previously.
-	ErrInvalidatedDeviceCode = errors.New("Device code has been invalidated")
+	ErrInvalidatedDeviceCode = stderr.New("Device code has been invalidated")
 	// ErrSerializationFailure is an error indicating that the transactional capable storage could not guarantee
 	// consistency of Update & Delete operations on the same rows between multiple sessions.
-	ErrSerializationFailure = errors.New("The request could not be completed due to concurrent access")
-	ErrUnknownRequest       = &RFC6749Error{
+	ErrSerializationFailure = &RFC6749Error{
+		ErrorField:       errUnknownErrorName,
+		DescriptionField: "The request could not be completed because another request is competing for the same resource.",
+		CodeField:        http.StatusConflict,
+	}
+	ErrUnknownRequest = &RFC6749Error{
 		ErrorField:       errUnknownErrorName,
 		DescriptionField: "The handler is not responsible for this request.",
 		CodeField:        http.StatusBadRequest,

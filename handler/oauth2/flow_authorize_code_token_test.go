@@ -250,11 +250,11 @@ func TestAuthorizeCode_HandleTokenEndpointRequest(t *testing.T) {
 				ScopeStrategy:            fosite.HierarchicScopeStrategy,
 				AudienceMatchingStrategy: fosite.DefaultAudienceMatchingStrategy,
 				AuthorizeCodeLifespan:    time.Minute,
-      }
+			}
 			h := GenericCodeTokenEndpointHandler{
 				AccessRequestValidator: &AuthorizeExplicitGrantAccessRequestValidator{},
 				CodeHandler: &AuthorizeCodeHandler{
-					AuthorizeCodeStrategy: strategy,
+					AuthorizeCodeStrategy: hmacshaStrategy, // (zidebug) this used to be strategy
 				},
 				SessionHandler: &AuthorizeExplicitGrantSessionHandler{
 					AuthorizeCodeStorage: store,
